@@ -19,9 +19,9 @@ scrape_team_full_roster <- function(team, lookup_year){
 
     # extract pitching and batting tables --------------------------------------
 
-    pitching <- extract_roster(html, "p")
+    pitching <- extract_roster(html, "p", lookup_year)
 
-    batting <- extract_roster(html, "b")
+    batting <- extract_roster(html, "b", lookup_year)
 
     # store both data frames into a signle data frae ---------------------------
     df <- tibble::tibble(team = team,
@@ -32,6 +32,7 @@ scrape_team_full_roster <- function(team, lookup_year){
     df
 }
 
+#'@export
 scrape_mlb_full_roster <- function(lookup_year){
 
     teams <- npmlb::team_pages$abbreviation
@@ -97,8 +98,8 @@ get_link_text <- function(html){
     df <- tibble::tibble(link, text)
 }
 
-extract_roster <- function(html, type){
-
+extract_roster <- function(html, type, lookup_year){
+    # is there a way to not include lookup_year parameter?
     # set the css_selector for pitching or batting roster tables ---------------
 
     if(type == "p"){

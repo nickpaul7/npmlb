@@ -16,13 +16,23 @@ save_mlb_year <- function(year){
 
     }
 
+    fix_home_away <- function(df){
+
+        df %>%
+            mutate(at = stringr::str_replace(at, "@", "Away")) %>%
+            replace_na(list(at = "Home"))
+
+    }
+
     df_batting_game_logs <- df_final %>%
         filter(data_type == "batting") %>%
         unnest() %>%
         select(team, year, Name, player_id, game_log) %>%
         unnest() %>%
         readr::type_convert() %>%
-        mutate(Date = fix_date(Date, year))
+        mutate(Date = fix_date(Date, year)) %>%
+        remove_duplicate_player_logs() %>%
+        fix_home_away()
 
     df_pitching_game_logs <- df_final %>%
         filter(data_type == "pitching") %>%
@@ -30,7 +40,9 @@ save_mlb_year <- function(year){
         select(team, year, Name, player_id, game_log) %>%
         unnest() %>%
         readr::type_convert() %>%
-        mutate(Date2 = fix_date(Date, year))
+        mutate(Date2 = fix_date(Date, year)) %>%
+        remove_duplicate_player_logs() %>%
+        fix_home_away()
 
     df_batting_totals <- df %>%
         filter(data_type == "batting") %>%
@@ -49,7 +61,17 @@ save_mlb_year <- function(year){
 
     readr::write_rds(df_pitching_game_logs, fn_p_gl)
     readr::write_rds(df_batting_game_logs,  fn_b_gl)
-    readr::write_rds(df_pitching_game_logs, fn_p_total)
-    readr::write_rds(df_batting_game_logs, fn_b_total)
+    readr::write_rds(df_pitching_totals, fn_p_total)
+    readr::write_rds(df_batting_totals, fn_b_total)
+
+}
+
+remove_duplicate_player_logs <- function(df){
+
+    df %>%
+        dplyr::mutate(game_id = stringr::str_c(player_id, Date, Gtm)) %>%
+        dplyr::arrange(dplyr::desc(Date)) %>%
+        dplyr::distinct(game_id, .keep_all = TRUE)
+
 
 }
