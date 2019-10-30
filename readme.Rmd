@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # Introduction
@@ -38,7 +38,8 @@ To get all player game logs for entire season, use the code below.
 
 
 ```{r, eval = FALSE}
-npmlb::save_mlb_year(2019)
+path <- "/data/"
+npmlb::save_mlb_year(2019, save_path = path)
 ```
 
 
@@ -72,6 +73,7 @@ npmlb::team_pages
 link <- "https://www.baseball-reference.com/players/gl.fcgi?id=lemahdj01&t=b&year=2019"
 type = "b"
 df_player_log <- npmlb::scrape_player_game_logs(link, type)
+dplyr::glimpse(df_player_log)
 ```
 
 
