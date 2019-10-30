@@ -128,6 +128,8 @@ make_gamelog_link <- function(id, type, year){
 
 }
 
+#'@export
+
 scrape_player_game_logs <- function(game_log_url, type){
 
     # read the page with game logs ---------------------------------------------
@@ -214,6 +216,22 @@ get_game_logs_mlb <- function(year){
  #run through an example of batting data
 
 }
+
+#'@export
+
+create_WHIP <- function(W, H, IP){
+
+   full_innings <- IP %>%
+       floor()
+
+   partial_innings <- (IP - full_innings) * (1/3)
+
+   adjusted_IP <- full_innings + partial_innings
+
+   WHIP <- (W + H) / adjusted_IP
+}
+
+
 
 # old code ---------------------------------------------------------------------
 

@@ -9,4 +9,69 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
+This package is designed to collect baseball data from the web.  Currently the package supports pulling data from the following sites:
+
+https://www.baseball-reference.com/
+
+* Player Game Logs
+* HOF Players
+* Career Statistics
+
+# Install
+
+To install the latest version use the following code:
+
+```{r, eval = FALSE}
+devtools::install_github("nickpaul7/npmlb")
+```
+
+# Required Packages
+
+```{r}
+library(tidyverse)
+```
+
+
+# Player Game Logs
+
+To get all player game logs for entire season, use the code below.
+
+
+```{r, eval = FALSE}
+npmlb::save_mlb_year(2019)
+```
+
+
+# Get Team Roster
+
+The `scrape_team_full_roster()` function will collect the pitching and batting roster for a given team.
+
+```{r}
+team <- "NYY"
+year <- "2019"
+df_roster <- npmlb::scrape_team_full_roster(team, year)
+```
+
+To extract the rosters, you can use the following code.
+
+```{r}
+df_roster %>% 
+    filter(data_type == "pitching") %>% 
+    unnest()
+```
+
+The `team_pages` data object contains the abbreviations for each team.
+
+```{r}
+npmlb::team_pages
+```
+
+# Scrape a Player Page
+
+```{r}
+link <- "https://www.baseball-reference.com/players/gl.fcgi?id=lemahdj01&t=b&year=2019"
+type = "b"
+df_player_log <- npmlb::scrape_player_game_logs(link, type)
+```
+
 

@@ -1,6 +1,6 @@
 
 #'@export
-save_mlb_year <- function(year){
+save_mlb_year <- function(year, save_path = "/data/mlb/"){
 
     df <- scrape_mlb_full_roster(year)
 
@@ -54,10 +54,12 @@ save_mlb_year <- function(year){
         unnest() %>%
         readr::type_convert()
 
-    fn_p_gl <- str_c("/data/mlb/", "pitching_", "game_log_", year)
-    fn_b_gl <- str_c("/data/mlb/", "batting_", "game_log_", year)
-    fn_p_total <- str_c("/data/mlb/", "pitching_", "total_", year)
-    fn_b_total <- str_c("/data/mlb/", "batting_", "total_", year)
+
+
+    fn_p_gl <- str_c(save_path, "pitching_", "game_log_", year)
+    fn_b_gl <- str_c(save_path, "batting_", "game_log_", year)
+    fn_p_total <- str_c(save_path, "pitching_", "total_", year)
+    fn_b_total <- str_c(save_path, "batting_", "total_", year)
 
     readr::write_rds(df_pitching_game_logs, fn_p_gl)
     readr::write_rds(df_batting_game_logs,  fn_b_gl)

@@ -43,6 +43,7 @@ scrape_pitching_career_stats <- function(url, player = NULL){
 }
 
 #'@export
+#'
 filter_career_totals <- function(df){
 
     df %>%
